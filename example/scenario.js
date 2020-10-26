@@ -63,4 +63,4 @@ const botDoThings = async (botData) => {
     /////////////////////////////////////////////////////////////////////////////
 };
 
-module.export = botDoThings;
+module.exports = botDoThings;
