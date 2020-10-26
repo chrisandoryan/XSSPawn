@@ -1,0 +1,29 @@
+{
+  "name": "base_image_xssbot",
+  "version": "1.0.0",
+  "description": "Visit-triggered XSS Bot with more flexibility and customization",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrisandoryan/base_image_xssbot.git"
+  },
+  "keywords": [
+    "xssbot"
+  ],
+  "author": "chrisandoryan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chrisandoryan/base_image_xssbot/issues"
+  },
+  "homepage": "https://github.com/chrisandoryan/base_image_xssbot#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "puppeteer-core": "^5.4.0"
+  }
+}
