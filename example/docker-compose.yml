@@ -13,8 +13,8 @@ services:
     volumes:
       - ./scenario.js:/home/bot/scenario.js
     environment:
-      - COOKIE_DOMAIN=localhost
+      - COOKIE_DOMAIN=web
       - COOKIE_KEY=flag
-      - COOKIE_VALUE=ctf{w0w_its_work1ng}
+      - COOKIE_VALUE=CTFCTF{w0w_xss-ed_my_lads_112823f103}
       - BOT_PORT=5000
     restart: always

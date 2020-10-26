@@ -43,11 +43,21 @@ const monitorConsoleOutput = async (botData) => {
     });
 }
 
-const botDoThings = async (botData) => {
-    console.log(`[+] Executing Customized Bot Scenario`);
-    // ======= Compose your custom Bot scenario here =======
-    
-    ////////////////////////////////////////////////////////
+const beforeVisit = async (botData) => {
+    console.log(`[+] Executing Pre-visit Bot Scenario`);
+    // ======= Compose Bot scenario here to run after the URL has been visited =======
+
+    //////////////////////////////////////////////////////////////////////////////////
 };
 
-module.exports = botDoThings;
+const afterVisit = async (botData) => {
+    console.log(`[+] Executing Post-visit Bot Scenario`);
+    // ======= Compose Bot scenario here to run before the URL is visited =======
+
+    //////////////////////////////////////////////////////////////////////////////////
+};
+
+module.exports = {
+    beforeVisit,
+    afterVisit
+};

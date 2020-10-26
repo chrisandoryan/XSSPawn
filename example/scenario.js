@@ -4,7 +4,7 @@ const setCookie = async (botData) => {
     const COOKIE_KEY = process.env.COOKIE_KEY || "flag";
     const COOKIE_VALUE = process.env.COOKIE_VALUE || "null";
 
-    console.log(`[${botData.ip}][${botData._num}] [+] Setting Up Customized Cookie`);
+    console.log(`[${botData.reqIp}][${botData.reqNum}] [+] Setting Up Browser Cookie`);
     await botData.page.setCookie({
         name: COOKIE_KEY,
         value: COOKIE_VALUE,
@@ -19,10 +19,8 @@ const setCookie = async (botData) => {
 
 // execJavascript: evaluate JavaScript in the Bot's browser context (run JS in Bot's browser console)
 const execJavascript = async (botData, jsFunc) => {
-    console.log(`[${botData.ip}][${botData._num}] [+] Executing JavaScript`);
-    await botData.page.evaluate(() => {
-        eval(jsFunc);
-    });
+    console.log(`[${botData.reqIp}][${botData.reqNum}] [+] Executing JavaScript`);
+    await botData.page.evaluate(jsFunc);
 };
 
 // monitorBrowserRequest: print out every HTTP request performed by Bot's browser when visiting a URL
@@ -37,30 +35,40 @@ const monitorConsoleOutput = async (botData) => {
     await botData.page.on('console', async msg => {
         msg.args().forEach(arg => {
             arg.jsonValue().then(_arg => {
-                console.log(`[$] Console Output: `, _arg);
+                console.log(`[$] Console Output:`, _arg);
             });
         });
     });
 }
 
-const botDoThings = async (botData) => {
+const beforeVisit = async (botData) => {
+    console.log(`[${botData.reqIp}][${botData.reqNum}] [+] Running Pre-visit Scenario`);
+
     // 1. Set the FLAG into Bot's cookie
     setCookie(botData);
 
-    // 2. Execute JavaScript on Bot's browser console
-    execJavascript(botData, () => {
-        console.log(document.cookie);
-    });
-
-    // 3. Display requests performed by Bot's browser
+    // 2. Display requests performed by Bot's browser
     monitorBrowserRequest(botData);
-
-    // 4. Display Bot's browser console output
-    monitorConsoleOutput(botData);
-
-    // 5. etc., etc. Feel free to add whatever other scenario you have in mind :)
 
     /////////////////////////////////////////////////////////////////////////////
 };
 
-module.exports = botDoThings;
+const afterVisit = async (botData) => {
+    console.log(`[${botData.reqIp}][${botData.reqNum}] [+] Running Post-visit Scenario`);
+
+    // 3. Execute JavaScript on Bot's browser console
+    execJavascript(botData, () => {
+        alert("XSSed!");
+        console.log(document.cookie);
+    });
+    
+    // 4. Display Bot's browser console output
+    monitorConsoleOutput(botData);
+
+    /////////////////////////////////////////////////////////////////////////////
+};
+
+module.exports = {
+    beforeVisit,
+    afterVisit
+};

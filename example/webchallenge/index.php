@@ -1,7 +1,7 @@
 <?php
     if (isset($_GET["exploit"])) {
         $bot_url = "http://xssbot:5000/visit";
-        $visit_url = "http://web:8088/index.php";
+        $visit_url = "http://web/index.php";
 
         $ch = curl_init($bot_url);
 

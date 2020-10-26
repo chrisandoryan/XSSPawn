@@ -9,11 +9,11 @@ app.use(bodyParser.json());
 const BOT_PORT = process.env.BOT_PORT || 5000;
 
 var visit_num = 0;
-var botDoThings = null;
+var botScenario = null;
 var useScenario = isModuleAvailable("./scenario");
 
 if (useScenario) {
-    botDoThings = require('./scenario');
+    botScenario = require('./scenario');
     console.log(`[+] scenario.js found, Bot will continue with customized actions.`);
 }
 else {
@@ -57,16 +57,20 @@ const visit = async (ip, url) => {
             console.error(`[-] Request failed: ${req.url()} ${JSON.stringify(req.failure())}`);
         });
 
-        // ===== Running custom scenario if any, see scenario.js =========
-
-        if (useScenario && botDoThings !== null) {
-            await botDoThings(botData);
+        // ===== Running Pre-visit scenario, see scenario.js =========
+        if (useScenario && botScenario !== null) {
+            await botScenario.beforeVisit(botData);
         }
-
-        // ===============================================================
+        // ===========================================================
 
         console.log(`[${ip}][${_num}] [+] Opening Page ${url}`);
         await page.goto(url, { waitUntil: 'networkidle2' });
+
+        // ===== Running Post-visit scenario, see scenario.js =========
+        if (useScenario && botScenario !== null) {
+            await botScenario.afterVisit(botData);
+        }
+        // ============================================================
         
         await page.tracing.stop();
         await page.close();
