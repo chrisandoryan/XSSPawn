@@ -9,8 +9,18 @@ Forked from awesomely crafted https://github.com/CTFTraining/base_image_xssbot
 - puppeteer-core
 - Express.js
 
+## How It Works
+***XSSPawn*** is a trigger-based, Express-powered service that relies on HTTP request communication. To make XSSPawn visit certain URL, someone needs to send an HTTP POST request with JSON-encoded data like below, to `/visit` endpoint.
+
+```
+"{"url":"http://<domain-to-be-visited>/<some-page>"}"
+```
+
+Upon receiving the data, XSSPawn will spawn Chromium headless browser and visit the designated URL.
+
 ## Getting Started
 
+Generally, the Bot itself wi
 **app.js**
 
 ```javascript
