@@ -20,8 +20,7 @@ else {
 }
 
 app.post('/visit', async (req, res) => {
-    let data = req.body;
-    let url = data.url;
+    let url = req.body.url;
     let ip =  req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     await visit(ip, url);
     
@@ -41,11 +40,11 @@ const visit = async (ip, url) => {
         await page.tracing.start({ path: `/tmp/${ip}_${new Date()}-trace.json` });
 
         await page.on('error', err => {
-            console.error(`[${ip}][${_num}] [#] Error!`, err);
+            console.error(`[${ip}][${_num}] [#] Error: `, err);
         });
 
         await page.on('pageerror', msg => {
-            console.error(`[${ip}][${_num}] [-] Page error: `, msg);
+            console.error(`[${ip}][${_num}] [-] Page Error: `, msg);
         });
 
         await page.on('dialog', async dialog => {
@@ -57,7 +56,7 @@ const visit = async (ip, url) => {
             console.error(`[-] Request failed: ${req.url()} ${JSON.stringify(req.failure())}`);
         });
 
-        // ===== Custom Action, see scenario.js =====
+        // ===== Custom Action, see scenario.js =========
 
         if(useScenario) {
             botDoThings(botData);
@@ -65,7 +64,7 @@ const visit = async (ip, url) => {
 
         // ==============================================
 
-        console.log(`[${ip}][${_num}] [+] Opening page ${url}`);
+        console.log(`[${ip}][${_num}] [+] Opening Page ${url}`);
         await page.goto(url, { waitUntil: 'networkidle2' });
         
         await page.tracing.stop();
@@ -75,7 +74,7 @@ const visit = async (ip, url) => {
 
     } catch (e) {
 
-        console.error("[-] Page visit\n", e.stack)
+        console.error("[-] Error on Page Visit\n", e.stack)
         
     }
 
@@ -110,6 +109,6 @@ var browser;
 })();
 
 app.listen(BOT_PORT, () => {
-    console.log(`[+] Bot app listening at http://localhost:${BOT_PORT}`);
-    console.log(`[+] Send POST to http://localhost:${BOT_PORT}/visit to execute Bot`);
+    console.log(`[+] Bot is listening at http://localhost:${BOT_PORT}`);
+    console.log(`[+] Send POST to http://localhost:${BOT_PORT}/visit to trigger the Bot`);
 })

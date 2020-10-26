@@ -3,7 +3,7 @@ const setCookie = async (botData) => {
     const COOKIE_KEY = process.env.COOKIE_KEY || "flag";
     const COOKIE_VALUE = process.env.COOKIE_VALUE || "null";
 
-    console.log(`[${botData.ip}][${botData._num}] [+] Setting up the cookie`);
+    console.log(`[${botData.ip}][${botData._num}] [+] Setting Up Customized Cookie`);
     await botData.page.setCookie({
         name: COOKIE_KEY,
         value: COOKIE_VALUE,
