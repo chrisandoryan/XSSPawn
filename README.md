@@ -1,7 +1,7 @@
 # XSSPawn
-Flexible and customizable visit bot for XSS challenges.
+XSSPawn is a ***flexible*** and ***customizable*** Visit Bot for CTF (mostly XSS) challenges setup.
 
-Forked from: https://github.com/CTFTraining/base_image_xssbot
+Forked from awesomely crafted https://github.com/CTFTraining/base_image_xssbot
 
 ## Built Upon
 - Alpine
@@ -9,7 +9,7 @@ Forked from: https://github.com/CTFTraining/base_image_xssbot
 - puppeteer-core
 - Express.js
 
-## Usage
+## Getting Started
 
 **app.js**
 
@@ -37,13 +37,6 @@ Add Service in your docker-compose.yml
 
 ## Custom Build
 
-`docker build -t xxx/xssbot .`
-
-**Dockerfile**
-
-```dockerfile
-FROM ctftraining/base_image_xssbot
-ENV FLAG="ctftraining{xss_bot_666}"
-COPY --chown=bot:bot ./app.js /home/bot/app.js
-```
+### Using Dockerfile
+### Using Docker-Compose
 
