@@ -2,17 +2,18 @@ const puppeteer = require('puppeteer-core');
 const express = require('express')
 const bodyParser = require('body-parser');
 const { isModuleAvailable, BotData } = require('./helper');
- 
+
 const app = express()
 app.use(bodyParser.json());
 
 const BOT_PORT = process.env.BOT_PORT || 5000;
 
 var visit_num = 0;
+var botDoThings = null;
 var useScenario = isModuleAvailable("./scenario");
 
 if (useScenario) {
-    const botDoThings = require("./scenario");
+    botDoThings = require('./scenario');
     console.log(`[+] scenario.js found, Bot will continue with customized actions.`);
 }
 else {
@@ -58,8 +59,8 @@ const visit = async (ip, url) => {
 
         // ===== Running custom scenario if any, see scenario.js =========
 
-        if (useScenario) {
-            botDoThings(botData);
+        if (useScenario && botDoThings !== null) {
+            await botDoThings(botData);
         }
 
         // ===============================================================
@@ -73,9 +74,7 @@ const visit = async (ip, url) => {
         console.log(`[${ip}][${_num}] [+] Bot Closed.`)
 
     } catch (e) {
-
         console.error("[-] Error on Page Visit\n", e.stack)
-        
     }
 
 }

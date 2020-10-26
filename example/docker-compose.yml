@@ -1,0 +1,20 @@
+version: "2"
+services:
+  web:
+    image: ctftraining/base_image_nginx_php_56
+    volumes:
+      - ./webchallenge/index.php:/var/www/html/index.php
+    restart: always
+    ports:
+      - "8088:80"
+  xssbot:
+    image: siahaan/xsspawn:alpha
+    # shm_size: '1gb'
+    volumes:
+      - ./scenario.js:/home/bot/scenario.js
+    environment:
+      - COOKIE_DOMAIN=localhost
+      - COOKIE_KEY=flag
+      - COOKIE_VALUE=ctf{w0w_its_work1ng}
+      - BOT_PORT=5000
+    restart: always

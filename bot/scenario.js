@@ -44,9 +44,10 @@ const monitorConsoleOutput = async (botData) => {
 }
 
 const botDoThings = async (botData) => {
+    console.log(`[+] Executing Customized Bot Scenario`);
     // ======= Compose your custom Bot scenario here =======
     
     ////////////////////////////////////////////////////////
 };
 
-module.export = botDoThings;
+module.exports = botDoThings;
