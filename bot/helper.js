@@ -1,3 +1,12 @@
+class BotData {
+    constructor(reqNum, reqIp, url, page) {
+        this.reqNum = reqNum;
+        this.reqIp = reqIp;
+        this.url = url;
+        this.page = page;
+    }
+}
+
 const isModuleAvailable = (path) => {
     try {
         require.resolve(path);
@@ -7,4 +16,5 @@ const isModuleAvailable = (path) => {
     }
 }
 
-module.exports = isModuleAvailable;
+module.exports.isModuleAvailable = isModuleAvailable;
+module.exports.BotData = BotData;

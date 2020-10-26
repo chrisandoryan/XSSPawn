@@ -44,9 +44,23 @@ const monitorConsoleOutput = async (botData) => {
 }
 
 const botDoThings = async (botData) => {
-    // ======= Compose your custom Bot scenario here =======
-    
-    ////////////////////////////////////////////////////////
+    // 1. Set the FLAG into Bot's cookie
+    setCookie(botData);
+
+    // 2. Execute JavaScript on Bot's browser console
+    execJavascript(botData, () => {
+        console.log(document.cookie);
+    });
+
+    // 3. Display requests performed by Bot's browser
+    monitorBrowserRequest(botData);
+
+    // 4. Display Bot's browser console output
+    monitorConsoleOutput(botData);
+
+    // 5. etc., etc. Feel free to add whatever other scenario you have in mind :)
+
+    /////////////////////////////////////////////////////////////////////////////
 };
 
 module.export = botDoThings;

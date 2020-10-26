@@ -1,8 +1,12 @@
-# XSS Bot
+# XSSPawn
+Flexible and customizable visit bot for XSS challenges.
+Forked from: https://github.com/CTFTraining/base_image_xssbot
 
+## Built Upon
 - Alpine
-- chromium
+- Chromium
 - puppeteer-core
+- Express.js
 
 ## Usage
 

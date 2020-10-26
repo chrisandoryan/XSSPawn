@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer-core');
 const express = require('express')
 const bodyParser = require('body-parser');
-const isModuleAvailable = require('./helper');
+const { isModuleAvailable, BotData } = require('./helper');
  
 const app = express()
 app.use(bodyParser.json());
@@ -31,11 +31,11 @@ const visit = async (ip, url) => {
     let _num = ++visit_num;
     let page;
 
-    let botData = {_num, page, ip, url};
+    console.log(`[${ip}][${_num}] [+] Starting Bot.`);
     
     try {
         page = await browser.newPage();
-        console.log(`[${ip}][${_num}] [+] Bot Started.`);
+        let botData = new BotData(_num, ip, url, page);
 
         await page.tracing.start({ path: `/tmp/${ip}_${new Date()}-trace.json` });
 
@@ -56,13 +56,13 @@ const visit = async (ip, url) => {
             console.error(`[-] Request failed: ${req.url()} ${JSON.stringify(req.failure())}`);
         });
 
-        // ===== Custom Action, see scenario.js =========
+        // ===== Running custom scenario if any, see scenario.js =========
 
-        if(useScenario) {
+        if (useScenario) {
             botDoThings(botData);
         }
 
-        // ==============================================
+        // ===============================================================
 
         console.log(`[${ip}][${_num}] [+] Opening Page ${url}`);
         await page.goto(url, { waitUntil: 'networkidle2' });
