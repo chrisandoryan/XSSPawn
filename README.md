@@ -65,7 +65,7 @@ every code or instructions that you write in this placeholder function will be r
 
 #### 2. Integrate with Docker Image
 
-To apply `scenario.js` you have compose before, you need to send it to your Docker Image. Here's an example:
+To apply `scenario.js` you have composed before, you need to send it to your Docker Image. Here's an example:
 
 Add Service in your docker-compose.yml
 
