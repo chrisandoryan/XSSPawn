@@ -20,7 +20,7 @@ Upon receiving the data, XSSPawn will spawn Chromium headless browser and visit 
 
 ## Getting Started
 
-Generally, the visit feature of the bot will run out-of-the-box without any prior configuration. But if you want to compose your own ***scenario*** (e.g. setting up customized cookie, performing redirection, setting up HTTP request headers), you can do so by supplying your own `scenario.js` file like below.
+Generally, the visit feature of the bot will run out-of-the-box without any prior configuration. But if you want to compose your own ***scenario*** (e.g. setting up customized cookie, performing redirection, setting up HTTP request headers), you can do so by supplying your own `scenario.js` file like below (template can be found [here](src/scenario.js).
 
 ### 1. Building **scenario.js**
 
