@@ -1,3 +1,6 @@
+// ============ Utility Section ===================
+// ================================================
+
 // setCookie: set a cookie (mostly the Flag) at the Bot's browser
 const setCookie = async (botData) => {
     const COOKIE_DOMAIN = process.env.COOKIE_DOMAIN || "localhost";
@@ -43,6 +46,14 @@ const monitorConsoleOutput = async (botData) => {
     });
 }
 
+// ============ End of Utility Section ============
+// ================================================
+
+// ----------------------------------------------------------------- //
+
+// ============ Scenario Section ==================
+// ================================================
+
 const beforeVisit = async (botData) => {
     console.log(`[+] Executing Pre-visit Bot Scenario`);
     // ======= Compose Bot scenario here to run after the URL has been visited =======
@@ -56,6 +67,9 @@ const afterVisit = async (botData) => {
 
     //////////////////////////////////////////////////////////////////////////////////
 };
+
+// ============ End of Scenario Section ===========
+// ================================================
 
 module.exports = {
     beforeVisit,
