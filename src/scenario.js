@@ -56,14 +56,14 @@ const monitorConsoleOutput = async (botData) => {
 
 const beforeVisit = async (botData) => {
     console.log(`[+] Executing Pre-visit Bot Scenario`);
-    // ======= Compose Bot scenario here to run after the URL has been visited =======
+    // ======= Compose Bot scenario here to be ran before the URL is visited =======
 
     //////////////////////////////////////////////////////////////////////////////////
 };
 
 const afterVisit = async (botData) => {
     console.log(`[+] Executing Post-visit Bot Scenario`);
-    // ======= Compose Bot scenario here to run before the URL is visited =======
+    // ======= Compose Bot scenario here to be ran after the URL has been visited =======
 
     //////////////////////////////////////////////////////////////////////////////////
 };
