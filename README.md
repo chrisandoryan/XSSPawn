@@ -112,20 +112,6 @@ Every code or instructions that you write in this placeholder function will be r
 
 To apply `scenario.js` you have composed before, you need to send it to your Docker Image. Here's an example:
 
-Add Service in your docker-compose.yml
-
-```yaml
-  xssbot:
-    # build: .
-    image: ctftraining/base_image_xssbot
-    # shm_size: '1gb'
-    volumes:
-      - ./app.js:/home/bot/app.js
-    environment:
-      - FLAG=ctftraining{xss_bot_666}
-    restart: always
-```
-
 ## Custom Build
 
 ### Using Dockerfile
