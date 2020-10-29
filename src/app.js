@@ -25,7 +25,7 @@ app.post('/visit', async (req, res) => {
     let ip =  req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     await visit(ip, url);
     
-    res.send("Finished. ");
+    res.sendStatus(200);
 });
 
 const visit = async (ip, url) => {
@@ -38,27 +38,32 @@ const visit = async (ip, url) => {
         page = await browser.newPage();
         let botData = new BotData(_num, ip, url, page);
 
-        await page.tracing.start({ path: `/tmp/${ip}_${new Date()}-trace.json` });
+        try {
+            await page.tracing.start({ path: `/tmp/${ip}_${new Date()}-trace.json` });            
+        } catch (error) {
+            
+        }
 
-        await page.on('error', err => {
+        page.on('error', err => {
             console.error(`[${ip}][${_num}] [#] Error: `, err);
         });
 
-        await page.on('pageerror', msg => {
+        page.on('pageerror', msg => {
             console.error(`[${ip}][${_num}] [-] Page Error: `, msg);
         });
 
-        await page.on('dialog', async dialog => {
+        page.on('dialog', async dialog => {
             console.debug(`[#] Dialog: [${dialog.type()}] "${dialog.message()}" ${dialog.defaultValue() || ""}`);
             dialog.dismiss();
         });
 
-        await page.on('requestfailed', req => {
+        page.on('requestfailed', req => {
             console.error(`[-] Request failed: ${req.url()} ${JSON.stringify(req.failure())}`);
         });
 
         // ===== Running Pre-visit scenario, see scenario.js =========
         if (useScenario && botScenario !== null) {
+            console.log(`[!] Custom Scenario is being used. Preparing Pre-visit Scenario.`);
             await botScenario.beforeVisit(botData);
         }
         // ===========================================================
@@ -68,11 +73,17 @@ const visit = async (ip, url) => {
 
         // ===== Running Post-visit scenario, see scenario.js =========
         if (useScenario && botScenario !== null) {
+            console.log(`[!] Custom Scenario is being used. Preparing Post-visit Scenario.`);
             await botScenario.afterVisit(botData);
         }
         // ============================================================
         
-        await page.tracing.stop();
+        try {
+            await page.tracing.stop();            
+        } catch (error) {
+            
+        }
+        
         await page.close();
 
         console.log(`[${ip}][${_num}] [+] Bot Closed.`)
