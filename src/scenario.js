@@ -23,9 +23,7 @@ const setCookie = async (botData) => {
 // execJavascript: evaluate JavaScript in the Bot's browser context (run JS in Bot's browser console)
 const execJavascript = async (botData, jsFunc) => {
     console.log(`[${botData.ip}][${botData._num}] [+] Executing JavaScript`);
-    await botData.page.evaluate(() => {
-        eval(jsFunc);
-    });
+    await botData.page.evaluate(jsFunc);
 };
 
 // monitorBrowserRequest: print out every HTTP request performed by Bot's browser when visiting a URL
