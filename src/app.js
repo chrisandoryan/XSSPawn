@@ -84,9 +84,9 @@ const visit = async (ip, url) => {
             
         }
         
-        await page.close();
+        // await page.close();
 
-        console.log(`[${ip}][${_num}] [+] Bot Closed.`)
+        console.log(`[${ip}][${_num}] [+] Scenario Ended`)
 
     } catch (e) {
         console.error("[-] Error on Page Visit\n", e.stack)
