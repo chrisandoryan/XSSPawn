@@ -1,5 +1,5 @@
 # XSSPawn
-XSSPawn is a **flexible** and **customizable** Visit Bot for CTF (mostly XSS) challenges setup.
+XSSPawn is a **flexible** and **customizable** visitor bot for CTF (mostly XSS) challenges setup.
 
 Forked from awesomely crafted https://github.com/CTFTraining/base_image_xssbot
 
