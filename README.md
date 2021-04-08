@@ -77,6 +77,9 @@ This function receives `BotData` object (from [here](src/helper.js)) as the only
   page // Pupetteer's page object (from newPage() method)
 }
 ```
+
+**What is beforeVisit?**
+
 Every code or instructions that you write in this placeholder function will be run right **before** the bot visits the designated URL. This allows you to do some things (e.g cleaning up cookie, running JavaScript, etc.) in the Bot's browser context before it actually visits the URL.
 
 For example:
@@ -94,7 +97,7 @@ const beforeVisit = async (botData) => {
 };
 ```
 
-By composing the `beforeVisit()` function like above, 
+By composing the `beforeVisit()` function like above, before the BOT visits the page, the headless browser will inject arbitrary cookie (usually containing the flag) to the destined page. Then it will display every requests made on the page (similar to if you inspect the browser's network tab).
 
 **afterVisit(botData)**
 ```javascript
@@ -106,11 +109,14 @@ const afterVisit = async (botData) => {
 ```
 This function also receives `BotData` object as the only parameter.
 
+**What is afterVisit?**
+
 Every code or instructions that you write in this placeholder function will be run **after** the bot visits the designated URL. This allows you to do things (e.g performing follow-up requests, logging, etc.) in the Bot's browser context after the URL has been visited.
 
 #### 2. Integrate with Docker Image
 
 To apply `scenario.js` you have composed before, you need to send it to your Docker Image. Here's an example:
+TBA.
 
 ## Custom Build
 
