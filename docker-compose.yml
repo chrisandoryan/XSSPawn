@@ -1,5 +1,5 @@
 version: "2"
-services:  
+services:
   xssbot:
     build: .
     # shm_size: '1gb'

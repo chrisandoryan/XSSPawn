@@ -1,8 +1,6 @@
-FROM node:alpine
+FROM node:16-alpine3.16
 
 ENV LANG="C.UTF-8" PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-
-# sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/' /etc/apk/repositories && \
 
 RUN apk update && \
     apk add --no-cache zlib-dev udev nss ca-certificates chromium && \
