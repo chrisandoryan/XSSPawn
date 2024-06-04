@@ -115,11 +115,23 @@ Every code or instructions that you write in this placeholder function will be r
 
 #### 2. Integrate with Docker Image
 
-To apply `scenario.js` you have composed before, you need to send it to your Docker Image. Here's an example:
-TBA.
+To apply `scenario.js` you have composed before, you need to send it to your Docker Image. Here's an example using `docker-compose.yml` with Docker Volume:
 
-## Custom Build
+```
+version: '3.9'
 
-### Using Dockerfile
-### Using Docker-Compose
-
+services:
+  xssbot:
+    image: siahaan/xsspawn
+    # shm_size: '1gb' # Uncomment if shared memory size needs to be set
+    environment:
+      COOKIE_DOMAIN: localhost
+      COOKIE_KEY: flag
+      COOKIE_VALUE: ctf{w0w_its_work1ng}
+      BOT_PORT: 5000
+    volumes:
+      - ./scenario.js:/home/bot/scenario.js
+    ports:
+      - 8081:5000
+    restart: always
+```
