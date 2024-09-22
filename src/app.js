@@ -128,7 +128,7 @@ const visit = async (ip, url) => {
         try {
             await page.waitForNavigation({waitUntil: 'networkidle0'});
         } catch (error) {
-            error = `[-] Page cleaning-up error: ${error}`;
+            error = `[-] Page Clean Up Error: ${error}`;
             console.error(error);
 
             return new VisitResult(false, error);

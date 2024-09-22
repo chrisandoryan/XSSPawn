@@ -1,7 +1,7 @@
 # XSSPawn
 XSSPawn is a **flexible** and **customizable** visitor bot for CTF (mostly XSS) challenges setup.
 
-Forked from awesomely crafted https://github.com/CTFTraining/base_image_xssbot
+Forked from the awesomely crafted https://github.com/CTFTraining/base_image_xssbot
 
 ## Built Upon
 - Alpine
@@ -10,13 +10,26 @@ Forked from awesomely crafted https://github.com/CTFTraining/base_image_xssbot
 - Express.js
 
 ## How It Works
-**XSSPawn** is a trigger-based, Express-powered service that relies on HTTP request communication. To make XSSPawn visit certain URL, someone needs to send an HTTP POST request with JSON-encoded data like below, into `/visit` endpoint.
+**XSSPawn** is a trigger-based, Express-powered service that relies on HTTP request communication. To make XSSPawn visit certain URL, you need to send an HTTP POST request (JSON-encoded or form-data) into `http://BOT_IP:BOT_PORT/visit` endpoint, with the following data:
 
-```
-"{"url":"http://<domain-to-be-visited>/<some-page>"}"
+```json
+{
+  "url": "http://<domain-to-be-visited>/<some-page>"
+}
 ```
 
 Upon receiving the data, XSSPawn will spawn Chromium headless browser and visit the designated URL.
+
+> [!NOTE]  
+> By default, XSSPawn runs on port 4500.
+
+### XSSPawn now have a UI page!
+
+If you don't want to trigger the bot programatically from your challenge, we have added a UI page for users to input the URL they wish for the bot to visit. 
+
+![XSSPawn UI](./assets/xsspawn-ui.png)
+
+The UI can be accessed from the bot's base URL, e.g., `http://BOT_IP:BOT_PORT/`
 
 ## Getting Started
 
@@ -40,10 +53,10 @@ There are two sections in `scenario.js` template file; the **utility** section a
 ```
 
 This sections exists as the building blocks for the scenario. It consists of functions that can be called right away to make the bot perform specific actions:
-- `setCookie(botData)`
-- `execJavascript(botData, jsFunc)`
-- `monitorBrowserRequest(botData)`
-- `monitorConsoleOutput(botData)`
+- `setCookie(botData)` to set some arbitrary cookies.
+- `execJavascript(botData, jsFunc)` to execute JS 
+- `monitorBrowserRequest(botData)` to log and display every HTTP requests invoked by the browser.
+- `monitorConsoleOutput(botData)` to print ou.tputs from the browser's dev console.
 
 #### Scenario Section
 ```javascript
