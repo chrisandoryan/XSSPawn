@@ -125,11 +125,18 @@ const visit = async (ip, url) => {
             
         }
         
-        page.waitForNavigation({
-            waitUntil: 'networkidle0',
-        }).then(() => {
-            page.close();
-        })
+        try {
+            await page.waitForNavigation({waitUntil: 'networkidle0'});
+        } catch (error) {
+            error = `[-] Page cleaning-up error: ${error}`;
+            console.error(error);
+
+            return new VisitResult(false, error);
+        }
+        finally {
+            await page.close();
+        }
+        
 
         console.log(`[${ip}][${_num}] [+] Scenario Ended`)
         success = `[${ip}][${_num}] [+] URL ${url} has been visited.`;
