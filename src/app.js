@@ -29,12 +29,20 @@ app.get('/', async (req, res) => {
 app.post('/visit', async (req, res) => {
     let url = req.body.url;
     let ip =  req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-    let result = await visit(ip, url);
+    try {
+        let result = await visit(ip, url);
     
-    res.send({
-        success: result.success,
-        message: result.response
-    }).status(200);
+        res.send({
+            success: result.success,
+            message: result.response
+        }).status(200);    
+    } catch (error) {
+        res.send({
+            success: false,
+            message: `Unknown error occured: ${error}`
+        }).send(500);
+    }
+    
 });
 
 const visit = async (ip, url) => {
