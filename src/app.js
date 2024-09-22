@@ -82,7 +82,14 @@ const visit = async (ip, url) => {
         // ===== Running Pre-visit scenario, see scenario.js =========
         if (useScenario && botScenario !== null) {
             console.log(`[!] Custom Scenario is being used. Preparing Pre-visit Scenario.`);
-            await botScenario.beforeVisit(botData);
+            try {
+                await botScenario.beforeVisit(botData);                
+            } catch (error) {
+                error = `[-] Scenario beforeVisit failed: ${error}`;
+                console.error(error);
+
+                return new VisitResult(false, error);
+            }
         }
         // ===========================================================
 
@@ -92,7 +99,15 @@ const visit = async (ip, url) => {
         // ===== Running Post-visit scenario, see scenario.js =========
         if (useScenario && botScenario !== null) {
             console.log(`[!] Custom Scenario is being used. Preparing Post-visit Scenario.`);
-            await botScenario.afterVisit(botData);
+
+            try {
+                await botScenario.afterVisit(botData);
+            } catch (error) {
+                error = `[-] Scenario afterVisit failed: ${error}`;
+                console.error(error);
+
+                return new VisitResult(false, error);
+            }
         }
         // ============================================================
         
