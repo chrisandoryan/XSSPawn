@@ -125,7 +125,11 @@ const visit = async (ip, url) => {
             
         }
         
-        await page.close();
+        page.waitForNavigation({
+            waitUntil: 'networkidle0',
+        }).then(() => {
+            page.close();
+        })
 
         console.log(`[${ip}][${_num}] [+] Scenario Ended`)
         success = `[${ip}][${_num}] [+] URL ${url} has been visited.`;
