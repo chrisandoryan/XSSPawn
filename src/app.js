@@ -125,19 +125,18 @@ const visit = async (ip, url) => {
         // ============================================================
         
         try {
+            await cleanup(page);
             await page.tracing.stop();            
+            await page.close();
         } catch (error) {
-            
+            error = `[${ip}][${_num}] [#] Error upon Visit Clean-up: ${error}`;
+            console.error(error);
         }
-        
-        await cleanup(page);
-        await page.close();
 
         console.log(`[${ip}][${_num}] [+] Scenario Ended`)
         success = `[${ip}][${_num}] [+] URL ${url} has been visited.`;
         
         return new VisitResult(true, success);
-
     } catch (e) {
         error = `[-] Error on Page Visit: ${e.stack}`;
         console.error(error);
