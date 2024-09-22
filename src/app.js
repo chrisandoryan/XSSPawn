@@ -1,12 +1,14 @@
 const puppeteer = require('puppeteer-core');
 const express = require('express')
 const bodyParser = require('body-parser');
-const { isModuleAvailable, BotData } = require('./helper');
+const { isModuleAvailable, BotData, VisitResult } = require('./helper');
 
 const app = express()
+app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-const BOT_PORT = process.env.BOT_PORT || 5000;
+const BOT_PORT = process.env.BOT_PORT || 4500;
 
 var visit_num = 0;
 var botScenario = null;
@@ -20,12 +22,19 @@ else {
     console.log(`[!] No scenario.js found, Bot will continue WITHOUT customized actions.`);
 }
 
+app.get('/', async (req, res) => {
+    return res.render('index');
+});
+
 app.post('/visit', async (req, res) => {
     let url = req.body.url;
-    let ip =  req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    await visit(ip, url);
+    let ip =  req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    let result = await visit(ip, url);
     
-    res.sendStatus(200);
+    res.send({
+        success: result.success,
+        message: result.response
+    }).status(200);
 });
 
 const visit = async (ip, url) => {
@@ -45,11 +54,17 @@ const visit = async (ip, url) => {
         }
 
         page.on('error', err => {
-            console.error(`[${ip}][${_num}] [#] Error: `, err);
+            error = `[${ip}][${_num}] [#] Error: ${err}`;
+            console.error(error);
+            
+            return new VisitResult(false, error);
         });
 
         page.on('pageerror', msg => {
-            console.error(`[${ip}][${_num}] [-] Page Error: `, msg);
+            error = `[${ip}][${_num}] [-] Page Error: ${msg}`;
+            console.error(error);
+            
+            return new VisitResult(false, error);
         });
 
         page.on('dialog', async dialog => {
@@ -58,7 +73,10 @@ const visit = async (ip, url) => {
         });
 
         page.on('requestfailed', req => {
-            console.error(`[-] Request failed: ${req.url()} ${JSON.stringify(req.failure())}`);
+            error = `[-] Request failed: ${req.url()} ${JSON.stringify(req.failure())}`;
+            console.error(error);
+            
+            return new VisitResult(false, error);
         });
 
         // ===== Running Pre-visit scenario, see scenario.js =========
@@ -84,12 +102,18 @@ const visit = async (ip, url) => {
             
         }
         
-        // await page.close();
+        await page.close();
 
         console.log(`[${ip}][${_num}] [+] Scenario Ended`)
+        success = `[${ip}][${_num}] [+] URL ${url} has been visited.`;
+        
+        return new VisitResult(true, success);
 
     } catch (e) {
-        console.error("[-] Error on Page Visit\n", e.stack)
+        error = `[-] Error on Page Visit: ${e.stack}`;
+        console.error(error);
+
+        return new VisitResult(false, error);
     }
 
 }
@@ -118,8 +142,6 @@ var browser;
 
     console.log("[+] Browser", "Launch success!");
 
-    // console.log("[+] Browser", "Close success!");
-    // await browser.close();
 })();
 
 app.listen(BOT_PORT, () => {

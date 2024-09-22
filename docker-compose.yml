@@ -8,9 +8,9 @@ services:
       COOKIE_DOMAIN: localhost
       COOKIE_KEY: flag
       COOKIE_VALUE: ctf{w0w_its_work1ng}
-      BOT_PORT: 5000
+      BOT_PORT: 4500
     volumes:
       - ./scenario.js:/home/bot/scenario.js
     ports:
-      - 8081:5000
+      - 8081:4500
     restart: always

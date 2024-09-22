@@ -7,6 +7,13 @@ class BotData {
     }
 }
 
+class VisitResult {
+    constructor(success, response) {
+        this.success = success;
+        this.response = response;
+    }
+}
+
 const isModuleAvailable = (path) => {
     try {
         require.resolve(path);
@@ -18,3 +25,4 @@ const isModuleAvailable = (path) => {
 
 module.exports.isModuleAvailable = isModuleAvailable;
 module.exports.BotData = BotData;
+module.exports.VisitResult = VisitResult;

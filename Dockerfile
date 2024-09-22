@@ -11,6 +11,7 @@ RUN apk update && \
 COPY --chown=bot:bot ./src/app.js /home/bot/app.js
 COPY --chown=bot:bot ./src/helper.js /home/bot/helper.js
 COPY --chown=bot:bot ./src/*.json /home/bot/
+COPY --chown=bot:bot ./src/views/ /home/bot/views/
 
 USER bot
 WORKDIR /home/bot

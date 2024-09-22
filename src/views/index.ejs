@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>XSSPawn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f8ff;
+            color: #333;
+        }
+
+        .logo {
+            font-size: 64px;
+            font-weight: bold;
+            color: #1a73e8;
+            margin-bottom: 20px;
+        }
+
+        .url-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        .url-box {
+            width: 50%;
+            max-width: 600px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 24px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .url-button {
+            padding: 12px 18px;
+            margin-left: 10px;
+            background-color: #1a73e8;
+            border: none;
+            border-radius: 24px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .url-button:hover {
+            background-color: #0c63cc;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 20px;
+            text-align: center;
+            font-size: 14px;
+            width: 100%;
+            color: #555;
+        }
+
+        footer a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo">XSSPawn</div>
+
+    <form class="url-container" method="POST" action="/visit">
+        <input type="text" name="url" class="url-box" placeholder="URL to visit (i.e., https://google.com)">
+        <button class="url-button"><b>Go!</b></button>
+    </form>
+
+    <footer>
+        <p>XSSPawn by chrisandoryan</p>
+        <p>https://github.com/chrisandoryan/XSSPawn</p>
+    </footer>
+
+</body>
+</html>
