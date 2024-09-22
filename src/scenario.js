@@ -1,7 +1,12 @@
 // ============ Utility Section ===================
 // ================================================
 
-// setCookie: set a cookie (mostly the Flag) at the Bot's browser
+const cleanup = async (botData) => {
+    await botData.page.on('request', () => { console.log("[*] Page on Request listener has been stopped."); });
+    await botData.page.on('console', () => { console.log("[*] Page on Console listener has been stopped."); });
+}
+
+// setCookie: set a cookie (mostly the Flag) at the bot's browser
 const setCookie = async (botData) => {
     const COOKIE_DOMAIN = process.env.COOKIE_DOMAIN || "localhost";
     const COOKIE_KEY = process.env.COOKIE_KEY || "flag";
@@ -20,20 +25,20 @@ const setCookie = async (botData) => {
     });
 };
 
-// execJavascript: evaluate JavaScript in the Bot's browser context (run JS in Bot's browser console)
+// execJavascript: evaluate JavaScript in the bot's browser context (run JS in bot's browser console)
 const execJavascript = async (botData, jsFunc) => {
     console.log(`[${botData.ip}][${botData._num}] [+] Executing JavaScript`);
     await botData.page.evaluate(jsFunc);
 };
 
-// monitorBrowserRequest: print out every HTTP request performed by Bot's browser when visiting a URL
+// monitorBrowserRequest: print out every HTTP request performed by bot's browser when visiting a URL
 const monitorBrowserRequest = async (botData) => {
     await botData.page.on('request', req => {
         console.log(`[+] Browser is requesting to ${req.url()}`);
     });
 }
 
-// monitorConsoleOutput: print out Bot's browser console output
+// monitorConsoleOutput: print out bot's browser console output
 const monitorConsoleOutput = async (botData) => {
     await botData.page.on('console', async msg => {
         msg.args().forEach(arg => {

@@ -127,16 +127,17 @@ const visit = async (ip, url) => {
         
         try {
             await page.waitForNavigation({waitUntil: 'networkidle0'});
+
         } catch (error) {
-            error = `[-] Page Clean Up Error: ${error}`;
+            error = `[-] Caught error while waiting for navigation to complete: ${error}`;
             console.error(error);
 
             return new VisitResult(false, error);
         }
         finally {
+            await botScenario.cleanup(botData);
             await page.close();
         }
-        
 
         console.log(`[${ip}][${_num}] [+] Scenario Ended`)
         success = `[${ip}][${_num}] [+] URL ${url} has been visited.`;
