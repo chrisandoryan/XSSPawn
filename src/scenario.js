@@ -1,11 +1,6 @@
 // ============ Utility Section ===================
 // ================================================
 
-const cleanup = async (botData) => {
-    await botData.page.on('request', () => { console.log("[*] Page on Request listener has been stopped."); });
-    await botData.page.on('console', () => { console.log("[*] Page on Console listener has been stopped."); });
-}
-
 // setCookie: set a cookie (mostly the Flag) at the bot's browser
 const setCookie = async (botData) => {
     const COOKIE_DOMAIN = process.env.COOKIE_DOMAIN || "localhost";

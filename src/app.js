@@ -45,6 +45,11 @@ app.post('/visit', async (req, res) => {
     
 });
 
+const cleanup = async (page) => {
+    await page.on('request', () => { console.log("[*] Page on Request listener has been stopped."); });
+    await page.on('console', () => { console.log("[*] Page on Console listener has been stopped."); });
+}
+
 const visit = async (ip, url) => {
     let _num = ++visit_num;
     let page;
@@ -135,7 +140,7 @@ const visit = async (ip, url) => {
             return new VisitResult(false, error);
         }
         finally {
-            await botScenario.cleanup(botData);
+            await cleanup(page);
             await page.close();
         }
 
