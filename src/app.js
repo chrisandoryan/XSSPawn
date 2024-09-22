@@ -131,6 +131,7 @@ const visit = async (ip, url) => {
         }
         
         try {
+            console.log(`[!] Waiting for the remaining HTTP network requests to finish.`)
             await page.waitForNavigation({waitUntil: 'networkidle0'});
 
         } catch (error) {
