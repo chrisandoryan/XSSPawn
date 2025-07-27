@@ -162,7 +162,9 @@ var browser;
             '--disable-translate',
             '--disable-device-discovery-notifications',
             '--disable-software-rasterizer',
-            '--disable-xss-auditor'
+            '--disable-xss-auditor',
+            '--disable-popup-blocking',
+            '--allow-popups-during-page-unload'
         ],
         ipDataDir: '/home/bot/data/',
         ignoreHTTPSErrors: true
