@@ -126,7 +126,6 @@ const visit = async (ip, url) => {
         
         try {
             await cleanup(page);
-            await page.tracing.stop();            
             await page.close();
         } catch (error) {
             error = `[${ip}][${_num}] [#] Error upon Visit Clean-up: ${error}`;
@@ -139,6 +138,8 @@ const visit = async (ip, url) => {
         return new VisitResult(true, success);
     } catch (e) {
         error = `[-] Error on Page Visit: ${e.stack}`;
+        await page.tracing.stop();       
+        await page.close();
         console.error(error);
 
         return new VisitResult(false, error);
