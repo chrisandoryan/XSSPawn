@@ -195,6 +195,8 @@ const visit = async (ip, url) => {
                 console.log(`[${ip}][${_num}] [!] New popup/tab detected: ${newPage.url()}`);
             });
 
+        // ===== Running Pre-visit scenario, see scenario.js =========
+
         if (useScenario && botScenario !== null) {
             console.log(`[!] Custom Scenario is being used. Preparing Pre-visit Scenario.`);
             try {
@@ -205,10 +207,13 @@ const visit = async (ip, url) => {
                 throw new Error(error);
             }
         }
+        // ===========================================================
 
         console.log(`[${ip}][${_num}] [+] Opening Page ${url}`);
         await page.goto(url, { waitUntil: 'networkidle2' });
 
+        // ===== Running Post-visit scenario, see scenario.js =========
+        
         if (useScenario && botScenario !== null) {
             console.log(`[!] Custom Scenario is being used. Preparing Post-visit Scenario.`);
 
@@ -220,6 +225,7 @@ const visit = async (ip, url) => {
                 throw new Error(error);
             }
         }
+        // ============================================================
         
         console.log(`[${ip}][${_num}] [+] Scenario Ended`)
         success = `[${ip}][${_num}] [+] URL ${url} has been visited.`;
