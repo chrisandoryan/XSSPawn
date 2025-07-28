@@ -47,7 +47,6 @@ app.post('/visit', async (req, res) => {
 
 const cleanup = async (page) => {
     try {
-        // Remove all event listeners to prevent memory leaks
         page.removeAllListeners('error');
         page.removeAllListeners('pageerror');
         page.removeAllListeners('dialog');
@@ -55,21 +54,16 @@ const cleanup = async (page) => {
         page.removeAllListeners('request');
         page.removeAllListeners('console');
         
-        // Stop tracing if it's running
         try {
             await page.tracing.stop();
         } catch (error) {
-            // Tracing might not be started, ignore error
         }
         
-        // Clear page context to free memory
         try {
             await page.evaluate(() => {
-                // Clear any stored data in the page context
                 if (window.localStorage) window.localStorage.clear();
                 if (window.sessionStorage) window.sessionStorage.clear();
                 if (window.indexedDB) {
-                    // Clear IndexedDB databases
                     window.indexedDB.databases().then(databases => {
                         databases.forEach(db => {
                             window.indexedDB.deleteDatabase(db.name);
@@ -78,7 +72,6 @@ const cleanup = async (page) => {
                 }
             });
         } catch (error) {
-            // Ignore errors in page context cleanup
         }
         
         console.log("[*] Page cleanup completed successfully.");
@@ -89,11 +82,9 @@ const cleanup = async (page) => {
 
 const closeAllPages = async (browser, mainPage, ip, _num) => {
     try {
-        // Get all pages in the browser context
         const pages = await browser.pages();
         console.log(`[${ip}][${_num}] [+] Found ${pages.length} total pages to close.`);
         
-        // Close all pages except the main page (we'll close it separately)
         const otherPages = pages.filter(p => p !== mainPage);
         
         for (let i = 0; i < otherPages.length; i++) {
@@ -101,13 +92,11 @@ const closeAllPages = async (browser, mainPage, ip, _num) => {
                 const otherPage = otherPages[i];
                 console.log(`[${ip}][${_num}] [+] Closing additional page ${i + 1}/${otherPages.length}`);
                 
-                // Clean up the additional page
                 await cleanup(otherPage);
                 await otherPage.close();
                 console.log(`[${ip}][${_num}] [+] Additional page ${i + 1} closed successfully.`);
             } catch (error) {
                 console.error(`[${ip}][${_num}] [#] Error closing additional page ${i + 1}: ${error}`);
-                // Force close if normal close fails
                 try {
                     await otherPages[i].close();
                 } catch (forceError) {
@@ -141,7 +130,6 @@ const createBrowser = async (ip, _num) => {
             '--disable-xss-auditor',
             '--disable-popup-blocking',
             '--allow-popups-during-page-unload',
-            // Memory optimization flags
             '--disable-background-timer-throttling',
             '--disable-backgrounding-occluded-windows',
             '--disable-renderer-backgrounding',
@@ -169,49 +157,44 @@ const visit = async (ip, url) => {
 
     console.log(`[${ip}][${_num}] [+] Starting Bot with new browser instance.`);
     
-    try {
-        // Create a new browser instance for this visit
-        browser = await createBrowser(ip, _num);
-        console.log(`[${ip}][${_num}] [+] New browser instance created.`);
-        
-        page = await browser.newPage();
-        let botData = new BotData(_num, ip, url, page);
+            try {
+            browser = await createBrowser(ip, _num);
+            console.log(`[${ip}][${_num}] [+] New browser instance created.`);
+            
+            page = await browser.newPage();
+            let botData = new BotData(_num, ip, url, page);
 
-        // Start tracing with error handling
-        try {
-            await page.tracing.start({ path: `/tmp/${ip}_${new Date()}-trace.json` });
-            tracingStarted = true;
-        } catch (error) {
-            console.log(`[!] Tracing failed to start: ${error}`);
-        }
+            try {
+                await page.tracing.start({ path: `/tmp/${ip}_${new Date()}-trace.json` });
+                tracingStarted = true;
+            } catch (error) {
+                console.log(`[!] Tracing failed to start: ${error}`);
+            }
 
-        // Set up event listeners
-        page.on('error', err => {
-            error = `[${ip}][${_num}] [#] Error: ${err}`;
-            console.error(error);
-        });
+            page.on('error', err => {
+                error = `[${ip}][${_num}] [#] Error: ${err}`;
+                console.error(error);
+            });
 
-        page.on('pageerror', msg => {
-            error = `[${ip}][${_num}] [-] Page Error: ${msg}`;
-            console.error(error);
-        });
+            page.on('pageerror', msg => {
+                error = `[${ip}][${_num}] [-] Page Error: ${msg}`;
+                console.error(error);
+            });
 
-        page.on('dialog', async dialog => {
-            console.debug(`[#] Dialog: [${dialog.type()}] "${dialog.message()}" ${dialog.defaultValue() || ""}`);
-            await dialog.dismiss();
-        });
+            page.on('dialog', async dialog => {
+                console.debug(`[#] Dialog: [${dialog.type()}] "${dialog.message()}" ${dialog.defaultValue() || ""}`);
+                await dialog.dismiss();
+            });
 
-        page.on('requestfailed', req => {
-            error = `[-] Request failed: ${req.url()} ${JSON.stringify(req.failure())}`;
-            console.error(error);
-        });
+            page.on('requestfailed', req => {
+                error = `[-] Request failed: ${req.url()} ${JSON.stringify(req.failure())}`;
+                console.error(error);
+            });
 
-        // Listen for new pages/tabs that might be opened during the visit
-        page.on('popup', async newPage => {
-            console.log(`[${ip}][${_num}] [!] New popup/tab detected: ${newPage.url()}`);
-        });
+            page.on('popup', async newPage => {
+                console.log(`[${ip}][${_num}] [!] New popup/tab detected: ${newPage.url()}`);
+            });
 
-        // ===== Running Pre-visit scenario, see scenario.js =========
         if (useScenario && botScenario !== null) {
             console.log(`[!] Custom Scenario is being used. Preparing Pre-visit Scenario.`);
             try {
@@ -222,12 +205,10 @@ const visit = async (ip, url) => {
                 throw new Error(error);
             }
         }
-        // ===========================================================
 
         console.log(`[${ip}][${_num}] [+] Opening Page ${url}`);
         await page.goto(url, { waitUntil: 'networkidle2' });
 
-        // ===== Running Post-visit scenario, see scenario.js =========
         if (useScenario && botScenario !== null) {
             console.log(`[!] Custom Scenario is being used. Preparing Post-visit Scenario.`);
 
@@ -239,7 +220,6 @@ const visit = async (ip, url) => {
                 throw new Error(error);
             }
         }
-        // ============================================================
         
         console.log(`[${ip}][${_num}] [+] Scenario Ended`)
         success = `[${ip}][${_num}] [+] URL ${url} has been visited.`;
@@ -250,11 +230,9 @@ const visit = async (ip, url) => {
         console.error(error);
         return new VisitResult(false, error);
     } finally {
-        // Always ensure cleanup happens, even if there's an error
         if (browser) {
             try {
                 if (page) {
-                    // Stop tracing if it was started
                     if (tracingStarted) {
                         try {
                             await page.tracing.stop();
@@ -263,24 +241,19 @@ const visit = async (ip, url) => {
                         }
                     }
                     
-                    // Close ALL pages and tabs that may have been opened during the interaction
                     await closeAllPages(browser, page, ip, _num);
                     
-                    // Perform cleanup on the main page
                     await cleanup(page);
                     
-                    // Close the main page
                     await page.close();
                     console.log(`[${ip}][${_num}] [+] Main page closed successfully.`);
                 }
                 
-                // Close the entire browser instance
                 await browser.close();
                 console.log(`[${ip}][${_num}] [+] Browser instance closed successfully.`);
             } catch (cleanupError) {
                 console.error(`[${ip}][${_num}] [#] Error during final cleanup: ${cleanupError}`);
                 
-                // Force close the page if it exists and normal close fails
                 if (page) {
                     try {
                         await page.close();
@@ -289,7 +262,6 @@ const visit = async (ip, url) => {
                     }
                 }
                 
-                // Force close the browser if normal close fails
                 try {
                     await browser.close();
                 } catch (forceBrowserCloseError) {
